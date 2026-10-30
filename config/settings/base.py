@@ -24,7 +24,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "django.contrib.humaniza",
+    "django.contrib.humanize",
 ]
 
 THIRD_PARTY_APPS = [
@@ -40,11 +40,11 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "core_apps.user_auth",
-    "core_apps.common",
-    "core_apps.user_profile",
-    "core_apps.accounts",
-    "core_apps.cards",
+    # "core_apps.user_auth",
+    # "core_apps.common",
+    # "core_apps.user_profile",
+    # "core_apps.accounts",
+    # "core_apps.cards",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
