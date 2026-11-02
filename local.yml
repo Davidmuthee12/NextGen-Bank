@@ -24,7 +24,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - banker_local_db:/var/lib/postgresql/data
+      - banker_local_db:/var/lib/postgresql
     env_file:
       - ./.envs/.env.local
     networks:
