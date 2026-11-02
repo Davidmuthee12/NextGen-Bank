@@ -1,3 +1,4 @@
+from datetime import timedelta
 from os import getenv, path
 from pathlib import Path
 
@@ -13,7 +14,6 @@ local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)
-
 
 # Application definition
 
@@ -40,13 +40,7 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
 ]
 
-LOCAL_APPS = [
-    "core_apps.user_auth",
-    "core_apps.common",
-    "core_apps.user_profile",
-    # "core_apps.accounts",
-    # "core_apps.cards",
-]
+LOCAL_APPS = ["core_apps.user_auth", "core_apps.common", "core_apps.user_profile"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -80,9 +74,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     "default": {
@@ -103,9 +96,8 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
 
-
 # Password validation
-# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -122,9 +114,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/6.1/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
 
@@ -136,20 +127,29 @@ USE_TZ = True
 
 SITE_ID = 1
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.1/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+AUTH_USER_MODEL = "user_auth.User"
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+SPECTACULAR_SETTINGS = {
+    "TITLE": "NextGen Bank API",
+    "DESCRIPTION": "An API built for a banking system",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "LICENSE": {
+        "name": "MIT License",
+        "url": "https://opensource.org/license/mit",
     },
 }
 
@@ -161,7 +161,8 @@ LOGURU_LOGGING = {
             "sink": BASE_DIR / "logs/debug.log",
             "level": "DEBUG",
             "filter": lambda record: record["level"].no <= logger.level("WARNING").no,
-            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - {message}",
+            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - "
+            "{message}",
             "rotation": "10MB",
             "retention": "30 days",
             "compression": "zip",
@@ -169,7 +170,8 @@ LOGURU_LOGGING = {
         {
             "sink": BASE_DIR / "logs/error.log",
             "level": "ERROR",
-            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - {message}",
+            "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - "
+            "{message}",
             "rotation": "10MB",
             "retention": "30 days",
             "compression": "zip",
@@ -178,7 +180,6 @@ LOGURU_LOGGING = {
         },
     ],
 }
-
 logger.configure(**LOGURU_LOGGING)
 
 LOGGING = {
