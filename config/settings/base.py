@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from os import getenv, path
 from pathlib import Path
 
@@ -140,6 +140,11 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_auth.User"
+DEFAULT_BIRTH_DATE = date(1900, 1, 1)
+DEFAULT_DATE = date(2000, 1, 1)
+DEFAULT_EXPIRY_DATE = date(2026, 1, 1)
+DEFAULT_COUNTRY = "KE"
+DEFAULT_PHONE_NUMBER = "+250784123456"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
