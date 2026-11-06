@@ -1,9 +1,10 @@
 import secrets
 from os import getenv
-from typing import Union, List
-from django.db import transaction
-from .emails import send_account_creation_email
+from typing import List, Union
 
+from django.db import transaction
+
+from .emails import send_account_creation_email
 from .models import BankAccount
 
 

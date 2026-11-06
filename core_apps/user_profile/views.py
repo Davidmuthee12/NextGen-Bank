@@ -1,23 +1,23 @@
 from typing import Any, List
 
-from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, filters, generics
-from rest_framework import serializers
+from rest_framework import filters, generics, serializers, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
-from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework.response import Response
 
+from core_apps.accounts.models import BankAccount
+from core_apps.accounts.utils import create_bank_account
 from core_apps.common.models import ContentView
 from core_apps.common.permissions import IsBranchManager
-from core_apps.accounts.utils import create_bank_account
-from core_apps.accounts.models import BankAccount
 from core_apps.common.renderers import GenericJSONRenderer
+
 from .models import NextOfKin, Profile
 from .serializers import NextOfKinSerializer, ProfileListSerializer, ProfileSerializer
 
