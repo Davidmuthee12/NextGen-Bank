@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 from loguru import logger
+
 from core_apps.accounts.models import BankAccount
 
 

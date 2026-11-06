@@ -1,5 +1,11 @@
-{% extends "emails/base.html" %} {% block title %} Bank Account Activated {%
-endblock %} {% block content %}
+{% extends "emails/base.html" %} 
+
+{% block title %} 
+  Bank Account Activated 
+{% endblock %} 
+
+{% block content %}
+
 <h2>Welcome to {{ site_name }}</h2>
 <p>Dear {{ account.user.full_name }}</p>
 <p>

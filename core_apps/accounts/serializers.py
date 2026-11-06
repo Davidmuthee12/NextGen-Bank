@@ -1,44 +1,45 @@
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
-from loguru import logger
-
-from core_apps.accounts.models import BankAccount
-
-
-def send_account_creation_email(user, bank_account):
-    subject = _("Your New Bank Account has been Created")
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [user.email]
-    context = {"user": user, "account": bank_account, "site_name": settings.SITE_NAME}
-    html_email = render_to_string("emails/account_created.html", context)
-    plain_email = strip_tags(html_email)
-    email = EmailMultiAlternatives(subject, plain_email, from_email, recipient_list)
-    email.attach_alternative(html_email, "text/html")
-    try:
-        email.send()
-        logger.info(f"Account Created email sent to: {user.email}")
-    except Exception as e:
-        logger.error(
-            f"Failed to send account created email to {email}: Error: {str(e)}"
-        )
+from rest_framework import serializers
+from .models import BankAccount
 
 
-def send_full_activation_email(account: BankAccount) -> None:
-    subject = _("Your Bank Account is now fully activated")
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [account.user.email]
-    context = {"account": account, "site_name": settings.SITE_NAME}
-    html_email = render_to_string("emails/bank_account_activated.html", context)
-    plain_email = strip_tags(html_email)
-    email = EmailMultiAlternatives(subject, plain_email, from_email, recipient_list)
-    email.attach_alternative(html_email, "text/html")
-    try:
-        email.send()
-        logger.info(f"Account Fully Activated email sent to: {account.user.email}")
-    except Exception as e:
-        logger.error(
-            f"Failed to send Fully Activated email to  {account.user.email}: Error: {str(e)}"
-        )
+class AccountVerificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankAccount
+        fields = [
+            "kyc_submitted",
+            "kyc_verified",
+            "verification_date",
+            "verification_notes",
+            "fully_activated",
+            "account_status",
+        ]
+        read_only_fields = ["fully_activated"]
+
+    def validate(self, data: dict) -> dict:
+        kyc_verified = data.get("kyc_verified")
+        kyc_submitted = data.get("kyc_submitted")
+        verification_date = data.get("verification_date")
+        verification_notes = data.get("verification_notes")
+
+        if kyc_verified:
+            if not verification_date:
+                raise serializers.ValidationError(
+                    _("Verification date is required when verifying an account.")
+                )
+            if not verification_notes:
+                raise serializers.ValidationError(
+                    _("Verification notes are required when verifying an account.")
+                )
+
+            if kyc_submitted and not all(
+                [kyc_verified, verification_date, verification_notes]
+            ):
+                raise serializers.ValidationError(
+                    _(
+                        "All Verification fields (KYC Verified,verification date and notes) must be"
+                        " provided when KYC is submitted"
+                    )
+                )
+
+        return data

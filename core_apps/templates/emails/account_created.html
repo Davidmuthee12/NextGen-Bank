@@ -1,4 +1,9 @@
-{% extends "emails/base.html" %} {% block title %} Account Created {% endblock%}
+{% extends "emails/base.html" %} 
+
+{% block title %} 
+  Account Created 
+{% endblock%}
+
 {% block content %}
 <h2>Welcome to {{ site_name }}</h2>
 <p>Dear {{ user.full_name }},</p>
